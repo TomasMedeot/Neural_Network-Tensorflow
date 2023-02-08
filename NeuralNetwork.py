@@ -17,7 +17,7 @@ def Image_Load(path: str, shuffle: bool):
     labels = []
     label = 0
     
-    print("\nLoading images")
+    print("Loading images")
     categories = os.listdir(path)
     print("Categories founded:")
     for i in categories:
