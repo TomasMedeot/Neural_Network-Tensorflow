@@ -6,7 +6,7 @@ from PIL import Image
 import random
 
 
-def Image_Load(path: str, shuffle:bool):
+def Image_Load(path: str, shuffle: bool):
     '''
     Load images from the folders on directory from -path-
     The labels are grouped accordig to images array
