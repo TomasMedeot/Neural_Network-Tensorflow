@@ -1,5 +1,1 @@
-{
-    "CATEGORIES":[],
-    "HOST":"localhost",
-    "PORT":80
-}
+{"CATEGORIES": ["Cordero Con Piel De Lobo", "New Age", "Santa Julia"], "PORT": 80, "HOST": "localhost"}

@@ -5,6 +5,7 @@ Email: tomimedeot@gmail.com
 
 import sys
 import os
+import json
 
 import flask
 import tensorflow as tf
@@ -33,16 +34,17 @@ def index():
             name = 0
         img = flask.request.files['img']
         img.save(os.path.join('DataSet/Server_Predict/'+str(name)+'.png'))
-        prediction=predict(model,['Cordero con piel de lobo','New Age','Santa Julia'],'DataSet/Server_Predict/',str(name)+'.png')
+        prediction=predict(model,DATA['CATEGORIES'],'DataSet/Server_Predict/',str(name)+'.png')
         return {'prediction':prediction}
 
     else:
         return None
 
 if __name__ == '__main__':
-
     try:
+        with open('data.json', 'r') as file:
+            DATA = json.load(file)
         _load_model()
     except:
-        sys.exit('Failed loading model')
-    app.run()
+        sys.exit('Failed loading elements')
+    app.run(DATA['HOST'],DATA['PORT'])

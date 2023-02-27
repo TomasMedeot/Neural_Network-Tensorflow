@@ -5,10 +5,13 @@ Email: tomimedeot@gmail.com
 
 import os
 import random
+import json
 
 import numpy as np
 import tensorflow as tf
 from PIL import Image
+
+DATA = 'data.json'
 
 
 def _image_load(path:str,shuffle:bool)->tuple[np.ndarray,np.ndarray,list[str]]:
@@ -53,9 +56,9 @@ def _image_load(path:str,shuffle:bool)->tuple[np.ndarray,np.ndarray,list[str]]:
     return images,labels,categories
 
 
-def _neural_network()->object:
+def _neural_network(outs:int)->object:
     '''
-    Set the neural network with 10.000 inputs and 3 outputs
+    Set the neural network with 10,000 inputs and as many outputs as categories found
     The activaction functions are ReLu for the input and hiden layers, for output layer is SoftMax
     '''
     model = tf.keras.models.Sequential([
@@ -71,7 +74,7 @@ def _neural_network()->object:
         tf.keras.layers.Dense(units=30, activation='relu'),
         tf.keras.layers.Dense(units=30, activation='relu'),
 
-        tf.keras.layers.Dense(3, activation='softmax'),
+        tf.keras.layers.Dense(outs, activation='softmax'),
     ])
     model.compile(
         optimizer='adam',
@@ -103,6 +106,15 @@ def _test(model:object,images:np.ndarray,labels:np.ndarray,categories:list)->str
         print(categories[prediction[counter_i]])
     return str(errors)+' Mistakes'
 
+def _save_data(categories:list):
+    with open(DATA, 'r') as file:
+        data = json.load(file)
+    
+    data['CATEGORIES']=categories
+
+    with open(DATA, 'w') as file:
+        json.dump(data, file)
+
 
 def predict(model:object,categories:list,path:str,img:str)->str:
     '''
@@ -122,12 +134,14 @@ def predict(model:object,categories:list,path:str,img:str)->str:
 
 if __name__ == '__main__':
 
-    model =_neural_network()#Set model
-
     images, labels, categories =_image_load("DataSet/Train/", True)#Load images to train
+
+    model =_neural_network(len(categories))#Set model
 
     model, trained =_train(model,images,labels,'Trained_Model')#Train-save the model for predictions
 
-    test_images, test_labels, test_categories =_image_load("DataSet/Test/",True)#Load test images
+    test_images, test_labels, test_categories=_image_load("DataSet/Test/",True)#Load test images
 
-    print(_test(model,test_images,test_labels,test_categories))#Test efectivty
+    print(_test(model,test_images,test_labels,categories))#Test efectivty
+
+    _save_data(categories)
