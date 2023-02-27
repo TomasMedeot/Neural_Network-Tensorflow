@@ -4,4 +4,4 @@ Train/
 __pycache__/
 *.pyc
 /Trained_Model
-/data.json
+data.json
