@@ -1,3 +1,7 @@
 Server_Predict/
 Test/
 Train/
+__pycache__/
+*.pyc
+/Trained_Model
+data.json

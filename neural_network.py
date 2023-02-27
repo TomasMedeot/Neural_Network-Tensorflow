@@ -11,7 +11,7 @@ import tensorflow as tf
 from PIL import Image
 
 
-def image_load(path:str,shuffle:bool)->tuple[np.ndarray,np.ndarray,list[str]]:
+def _image_load(path:str,shuffle:bool)->tuple[np.ndarray,np.ndarray,list[str]]:
     '''
     Load images from the folders on directory from -path-
     The labels are grouped accordig to images array
@@ -53,9 +53,9 @@ def image_load(path:str,shuffle:bool)->tuple[np.ndarray,np.ndarray,list[str]]:
     return images,labels,categories
 
 
-def neural_network()->object:
+def _neural_network()->object:
     '''
-    Set the neural network with 10.000 inputs and 2 outputs
+    Set the neural network with 10.000 inputs and 3 outputs
     The activaction functions are ReLu for the input and hiden layers, for output layer is SoftMax
     '''
     model = tf.keras.models.Sequential([
@@ -71,7 +71,7 @@ def neural_network()->object:
         tf.keras.layers.Dense(units=30, activation='relu'),
         tf.keras.layers.Dense(units=30, activation='relu'),
 
-        tf.keras.layers.Dense(2, activation='softmax'),
+        tf.keras.layers.Dense(3, activation='softmax'),
     ])
     model.compile(
         optimizer='adam',
@@ -81,7 +81,7 @@ def neural_network()->object:
     return model
 
 
-def train(model:object,images:np.ndarray,labels:np.ndarray,model_name:str)->tuple[object,object]:
+def _train(model:object,images:np.ndarray,labels:np.ndarray,model_name:str)->tuple[object,object]:
     '''
     Train the Neural Network Model using the images and labels and then save
     '''
@@ -91,7 +91,7 @@ def train(model:object,images:np.ndarray,labels:np.ndarray,model_name:str)->tupl
     return model,trained_model
 
 
-def test(model:object,images:np.ndarray,labels:np.ndarray,categories:list)->str:
+def _test(model:object,images:np.ndarray,labels:np.ndarray,categories:list)->str:
     '''
     Test the accuracy from Neural Network Model previusly trained and count the mistakes
     '''
@@ -122,12 +122,12 @@ def predict(model:object,categories:list,path:str,img:str)->str:
 
 if __name__ == '__main__':
 
-    model =neural_network()#Set model
+    model =_neural_network()#Set model
 
-    images, labels, categories =image_load("DataSet/Train/", True)#Load images to train
+    images, labels, categories =_image_load("DataSet/Train/", True)#Load images to train
 
-    model, trained =train(model,images,labels,'Trained_Model')#Train-save the model for predictions
+    model, trained =_train(model,images,labels,'Trained_Model')#Train-save the model for predictions
 
-    test_images, test_labels, test_categories =image_load("DataSet/Test/",True)#Load test images
+    test_images, test_labels, test_categories =_image_load("DataSet/Test/",True)#Load test images
 
-    print(test(model,test_images,test_labels,test_categories))#Try efectivty
+    print(_test(model,test_images,test_labels,test_categories))#Test efectivty
